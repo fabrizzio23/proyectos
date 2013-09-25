@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Ejemplo</title>
+	<link rel='stylesheet' href='{{STATIC_URL}}css/base.css'>
+</head>
+<body>
+	<h1>Aplicando Django</h1><hr>
+	<h2>Registre una foto:</h2>
+	<form id='formulario' method='post' enctype='multipart/form-data' action=''>{% csrf_token %}
+		{{formulario.as_p}}
+		<p><input type='submit' value='Registrar'/></p>
+	</form>
+	<hr>
+	<ul>
+	{% for dato in datos %}
+	<li>
+		<a>Título: {{dato.titulo}}</a><br>
+		<img src='{{MEDIA_URL}}{{dato.imagen}}'>
+	</li>
+	{% empty %}
+	<li>Aún no hay recetas registradas</li>
+	{% endfor %}
+</ul>
+</body>
+</html>
