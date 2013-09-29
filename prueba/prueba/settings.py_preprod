@@ -2,10 +2,14 @@
 #encoding:utf-8
 
 import os.path 
+import keyring
+import getpass
+import ConfigParser
 
 DEBUG = False
 #TEMPLATE_DEBUG = DEBUG
 RUTA = os.path.dirname(os.path.realpath(__file__))
+PROYECTO = "prueba"
 
 ADMINS = (
     # ('Your Name', 'your_email@example.com'),
@@ -13,13 +17,34 @@ ADMINS = (
 
 MANAGERS = ADMINS
 
+config_file = '/home/fabrizzio23/inicio.cfg'
+config = ConfigParser.SafeConfigParser({
+        'username':'','username_email':'',
+                })
+config.read(config_file)
+if config.has_section(PROYECTO):
+    db_name = config.get(PROYECTO, 'db_name')
+    username = config.get(PROYECTO,'username')
+    email = config.get(PROYECTO, 'email')
+    username_email = config.get(PROYECTO, 'username_email')
+    password = keyring.get_password(PROYECTO, username)
+    password_email = keyring.get_password(PROYECTO, username_email)
+
+    while password == None or password_email == None:
+        if password == None:
+            password = getpass.getpass("Password database:\n")
+            keyring.set_password(PROYECTO, username, password)
+        if password_email == None:
+            password_email = getpass.getpass("Password email:\n")
+            keyring.set_password(PROYECTO, username_email, password_email)
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
-        'NAME': 'prueba',                      # Or path to database file if using sqlite3.
+        'NAME': db_name,                      # Or path to database file if using sqlite3.
         # The following settings are not used with sqlite3:
-        'USER': 'root',
-        'PASSWORD': 'datosec23',
+        'USER': username,
+        'PASSWORD': password,
         'HOST': '',                      # Empty for localhost through domain sockets or '127.0.0.1' for localhost through TCP.
         'PORT': '',                      # Set to empty string for default.
     }
