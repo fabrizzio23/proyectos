@@ -16,6 +16,7 @@
 	{% for dato in datos %}
 	<li>
 		<a>Título: {{dato.titulo}}</a><br>
+		<a>Fecha: {{dato.fecha}}</a><br>
 		<img src='{{MEDIA_URL}}{{dato.imagen}}'>
 	</li>
 	{% empty %}
